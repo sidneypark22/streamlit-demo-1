@@ -1,7 +1,6 @@
 import streamlit as st
 import duckdb
 import re
-from st_keyup import st_keyup
 from streamlit import session_state as ss
 
 st.set_page_config(
