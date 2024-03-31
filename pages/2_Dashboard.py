@@ -3,6 +3,10 @@ import duckdb
 import sys
 import os
 import plotly.express as px
+import pandas as pd
+import io
+
+buffer = io.BytesIO()
 
 st.set_page_config(
     initial_sidebar_state='auto',
@@ -22,7 +26,7 @@ if 'base_df' not in ss:
             strftime(sale_date, '%m') as month,
             strftime(sale_date, '%d') as week,
             strftime(sale_date, '%Y-%m') as year_month,
-            sale_date,
+            cast(sale_date as timestamp) as sale_date,
             coalesce(make, '') as make,
             coalesce(model, '') as model,
             coalesce(trim, '') as trim,
@@ -201,3 +205,36 @@ with st.container():
 
 with st.container():
     st.dataframe(df)
+    with st.expander(
+        label='Expand to download data',
+    ):
+        st.radio(
+            label='Download data',
+            key='radio_download_data',
+            options=['No', 'Yes'],
+        )
+        if ss.radio_download_data == 'Yes':
+            st.radio(
+                label="Choose output file format",
+                key="radio_choose_output_file_format",
+                options=['CSV', 'Excel'],
+            )
+            if ss.radio_choose_output_file_format == "CSV":
+                st.download_button(
+                    label='Download data above',
+                    key='download_button_df',
+                    data=df.to_csv(index=False, encoding='utf-8'),
+                    file_name='output_download.csv',
+                    mime='text/csv,'
+                )
+            elif ss.radio_choose_output_file_format == "Excel":
+                with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+                    df.to_excel(writer, sheet_name='Sheet1', index=False)
+                    writer.close()
+                    st.download_button(
+                        label='Download data above',
+                        key='download_button_df',
+                        data=buffer,
+                        file_name='output_download.xlsx',
+                        mime="application/vnd.ms-excel"
+                    )
