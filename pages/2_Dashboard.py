@@ -4,52 +4,55 @@ import sys
 import os
 import plotly.express as px
 
-df = duckdb.sql(
-    """with cte_car_prices as (
-        select *, try_strptime(substring(saledate, 1, 33), '%a %b %d %Y %H:%M:%S %Z') as sale_date
-        from read_csv('pages/files/car_prices.csv')
-        --limit 1000
-    )
-    select 
-        cast(year as string) as year,
-        strftime(sale_date, '%m') as month,
-        strftime(sale_date, '%d') as week,
-        strftime(sale_date, '%Y-%m') as year_month,
-        sale_date,
-        coalesce(make, '') as make,
-        coalesce(model, '') as model,
-        coalesce(trim, '') as trim,
-        coalesce(body, '') as body,
-        coalesce(transmission, '') as transmission,
-        coalesce(vin, '') as vin,
-        coalesce(state, '') as state,
-        coalesce(condition, -1) as condition,
-        case 
-            when odometer is null then 'Unknown'
-            when odometer < 50000 then '-50000'
-            when odometer >= 50000 and odometer < 100000 then '50000-100000'
-            when odometer >= 100000 and odometer < 150000 then '100000-150000'
-            when odometer >= 150000 and odometer < 200000 then '150000-200000'
-            when odometer >= 200000 and odometer < 250000 then '200000-250000'
-            when odometer >= 250000 and odometer < 300000 then '250000-300000'
-            when odometer >= 300000 then '300000-'
-            else 'Unknown'
-        end as odometer,
-        odometer as odometer_raw,
-        coalesce(color, '') as color,
-        coalesce(interior, '') as interior,
-        coalesce(seller, '') as seller,
-        mmr,
-        sellingprice as selling_price
-    from cte_car_prices
-    """
-).to_df()
-
 st.set_page_config(
     initial_sidebar_state='auto',
     layout='wide',
 )
 ss = st.session_state
+
+if 'base_df' not in ss:
+    ss.base_df = duckdb.sql(
+        """with cte_car_prices as (
+            select *, try_strptime(substring(saledate, 1, 33), '%a %b %d %Y %H:%M:%S %Z') as sale_date
+            from read_csv('pages/files/car_prices.csv')
+            --limit 1000
+        )
+        select 
+            cast(year as string) as year,
+            strftime(sale_date, '%m') as month,
+            strftime(sale_date, '%d') as week,
+            strftime(sale_date, '%Y-%m') as year_month,
+            sale_date,
+            coalesce(make, '') as make,
+            coalesce(model, '') as model,
+            coalesce(trim, '') as trim,
+            coalesce(body, '') as body,
+            coalesce(transmission, '') as transmission,
+            coalesce(vin, '') as vin,
+            coalesce(state, '') as state,
+            coalesce(condition, -1) as condition,
+            case 
+                when odometer is null then 'Unknown'
+                when odometer < 50000 then '-50000'
+                when odometer >= 50000 and odometer < 100000 then '50000-100000'
+                when odometer >= 100000 and odometer < 150000 then '100000-150000'
+                when odometer >= 150000 and odometer < 200000 then '150000-200000'
+                when odometer >= 200000 and odometer < 250000 then '200000-250000'
+                when odometer >= 250000 and odometer < 300000 then '250000-300000'
+                when odometer >= 300000 then '300000-'
+                else 'Unknown'
+            end as odometer,
+            odometer as odometer_raw,
+            coalesce(color, '') as color,
+            coalesce(interior, '') as interior,
+            coalesce(seller, '') as seller,
+            mmr,
+            sellingprice as selling_price
+        from cte_car_prices
+        """
+    ).to_df()
+
+df = ss.base_df.copy()
 
 # st.markdown(
 #     """

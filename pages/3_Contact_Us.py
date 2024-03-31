@@ -167,8 +167,8 @@ def on_submit_contact_request(first_name, last_name, email, phone_number, messag
         
         ss.contact_form_submit_count += 1
 
-# with c1:
-#     st.dataframe(df)
+with st.container():
+    st.dataframe(df)
 
 with c_contact_form:
     with st.form(
