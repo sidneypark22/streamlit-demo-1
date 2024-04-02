@@ -25,10 +25,10 @@ ss = st.session_state
 
 @st.cache_resource(experimental_allow_widgets=True)
 def get_manager():
-    return stx.CookieManager()
+    return stx.CookieManager(key='streamlit-demo-1-cookies')
 cookie_manager = get_manager()
 with st.container(border=False, height=1):
-    last_page = ss.get('init', {}).get('last_page', './Home.py')
+    last_page = cookie_manager.get('last_page') # ss.get('init', {}).get('last_page', './Home.py')
 
 with open('./config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)

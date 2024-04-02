@@ -26,7 +26,7 @@ hide_pages(['Login'])
 
 @st.cache_resource(experimental_allow_widgets=True)
 def get_manager():
-    return stx.CookieManager()
+    return stx.CookieManager(key='streamlit-demo-1-cookies')
 cookie_manager = get_manager()
 
 with st.container(border=False, height=1):
