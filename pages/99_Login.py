@@ -10,16 +10,16 @@ st.set_page_config(
     initial_sidebar_state='collapsed',
     layout='centered',
 )
-st.markdown(
-"""
-<style>
-    [data-testid="collapsedControl"] {
-        display: none
-    }
-</style>
-""",
-    unsafe_allow_html=True,
-)
+# st.markdown(
+# """
+# <style>
+#     [data-testid="collapsedControl"] {
+#         display: none
+#     }
+# </style>
+# """,
+#     unsafe_allow_html=True,
+# )
 
 ss = st.session_state
 
