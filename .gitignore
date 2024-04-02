@@ -1,2 +1,3 @@
 .venv
 website1
+.streamlit/secrets.toml

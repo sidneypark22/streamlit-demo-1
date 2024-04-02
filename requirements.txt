@@ -3,3 +3,7 @@ streamlit==1.31.1
 plotly
 openpyxl
 xlsxwriter
+streamlit-authenticator
+propelauth-py
+extra-streamlit-components
+st-pages
