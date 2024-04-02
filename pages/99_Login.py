@@ -33,6 +33,7 @@ with st.container(border=False, height=1):
 with open('./config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
 st.write(config)
+st.write(ss)
 authenticator = stauth.Authenticate(
     config['credentials'],
     config['cookie']['name'],
