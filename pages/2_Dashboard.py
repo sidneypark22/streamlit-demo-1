@@ -24,15 +24,15 @@ st.set_page_config(
     layout='wide',
 )
 
-show_pages(
-    [
-        Page("Home.py", "Home", "🏠"),
-        Page("pages/2_Dashboard.py", "Dashboard"),
-        Page("pages/3_Contact_Us.py", "Contact Us"),
-        # Page('./pages/99_Login.py', 'Login'),
-    ]
-)
-# hide_pages(['Login'])
+# show_pages(
+#     [
+#         Page("Home.py", "Home", "🏠"),
+#         Page("pages/2_Dashboard.py", "Dashboard"),
+#         Page("pages/3_Contact_Us.py", "Contact Us"),
+#         # Page('./pages/99_Login.py', 'Login'),
+#     ]
+# )
+# # hide_pages(['Login'])
 
 ss = st.session_state
 # st.write(ss)
@@ -42,20 +42,20 @@ def get_manager():
     return stx.CookieManager(key='streamlit-demo-1-cookies')
 cookie_manager = get_manager()
 
-def clear_filters(filter_columns):
-    # st.write(filter_columns)
-    with st.container(height=1, border=False):
-        for filter_column in filter_columns:
-            filter_key = f'filter_{filter_column}'
-            filter_key_selected = f'{filter_key}_selected'
-            if filter_key in cookies.keys():
-                cookie_manager.set(filter_key, [], f'clear_{filter_key}')
-            if filter_key in ss:
-                ss[filter_key] = []
-            if filter_key_selected in ss:
-                ss[filter_key_selected] = []
-    # streamlit_js_eval(js_expressions="parent.window.location.reload()")
-    st.rerun()
+# def clear_filters(filter_columns):
+#     # st.write(filter_columns)
+#     if ss.get('button_clear_filters', False):
+#         with st.container(height=1, border=False):
+#             for filter_column in filter_columns:
+#                 filter_key = f'filter_{filter_column}'
+#                 # filter_key_selected = f'{filter_key}_selected'
+#                 if filter_key in cookies.keys():
+#                     cookie_manager.set(filter_key, [], f'clear_{filter_key}')
+#                 if filter_key in ss:
+#                     ss[filter_key] = []
+#                 # if filter_key_selected in ss:
+#                 #     ss[filter_key_selected] = []
+#         # st.rerun()
 
 with st.container(border=False, height=1):
     cookie_manager.set('last_page', './pages/2_Dashboard.py')
@@ -82,7 +82,7 @@ elif st.session_state["authentication_status"] is False:
 else:
     with st.sidebar.container():
         authenticator.logout()
-
+    
     if 'base_df' not in ss:
         ss.base_df = duckdb.sql(
             """with cte_car_prices as (
@@ -155,6 +155,30 @@ else:
         'interior',
         'seller'
     ]
+
+    # if ss['button_clear_filters']:
+    #     clear_filters(filter_columns)
+    
+    # with st.sidebar.form(
+    #     key='form_clear_filters',
+    #     clear_on_submit=True,
+    #     border=False,
+    # ) as form_filter:
+    #     clear_filters_submitted = st.form_submit_button(label='Clear Filters', on_click=clear_filters(filter_columns))
+    #     if clear_filters_submitted:
+    #         clear_filters(filter_columns)
+    #         st.rerun()
+    
+    # clear_filters_cliked = st.sidebar.button(
+    #     label='Clear Filters',
+    #     key='button_clear_filters',
+    #     on_click=clear_filters(filter_columns),
+    #     # args=(filter_columns),
+    # )
+
+    # if clear_filters_cliked:
+    #     clear_filters(filter_columns)
+    #     st.rerun()
     
     with st.container(border=False, height=1):
         for filter_column in filter_columns:
@@ -192,14 +216,7 @@ else:
     #     )
     #     if clear_filter_submitted:
     #         clear_filters(filter_columns)
-    clear_filters_cliked = st.sidebar.button(
-        label='Clear Filters',
-        key='button_clear_filters',
-        # on_click=clear_filters,
-        # args=(filter_columns),
-    )
-    if clear_filters_cliked:
-        clear_filters(filter_columns)
+
     with st.sidebar.form(
         key='form_filter',
         clear_on_submit=False,
@@ -207,14 +224,16 @@ else:
     ) as form_filter:
         with st.expander('Filters', expanded=False):
             st.form_submit_button(label='Apply Filters')
+            # if clear_filters_cliked:
+            #     clear_filters(filter_columns)
             for filter_column in filter_columns:
                 filter_key=f'filter_{filter_column}'
-                ss[f'{filter_key}_selected'] = ss.get(filter_key, [])
+                # ss[f'{filter_key}_selected'] = ss.get(filter_key, [])
                 st.multiselect(
                     label=filter_column.capitalize(),
                     options=['All'] + list(df[filter_column].sort_values().unique()),
                     key=filter_key,
-                    default=ss[f'{filter_key}_selected'],
+                    default=ss.get(filter_key, []), #ss[f'{filter_key}_selected'],
                 )
     
     with st.container():

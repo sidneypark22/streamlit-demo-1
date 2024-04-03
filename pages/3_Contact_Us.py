@@ -14,15 +14,15 @@ st.set_page_config(
     layout='centered',
 )
 
-show_pages(
-    [
-        Page("Home.py", "Home", "🏠"),
-        Page("pages/2_Dashboard.py", "Dashboard"),
-        Page("pages/3_Contact_Us.py", "Contact Us"),
-        # Page('./pages/99_Login.py', 'Login'),
-    ]
-)
-# hide_pages(['Login'])
+# show_pages(
+#     [
+#         Page("Home.py", "Home", "🏠"),
+#         Page("pages/2_Dashboard.py", "Dashboard"),
+#         Page("pages/3_Contact_Us.py", "Contact Us"),
+#         # Page('./pages/99_Login.py', 'Login'),
+#     ]
+# )
+# # hide_pages(['Login'])
 
 @st.cache_resource(experimental_allow_widgets=True)
 def get_manager():
