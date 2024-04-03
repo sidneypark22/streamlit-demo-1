@@ -76,7 +76,7 @@ with open('config.yaml') as file:
 authenticator.login()
 
 if ss.get("authentication_status") is None:
-    st.switch_page('.Home.py')
+    st.switch_page('Home.py')
 elif st.session_state["authentication_status"] is False:
     st.error('Username or password is incorrect')
 else:
