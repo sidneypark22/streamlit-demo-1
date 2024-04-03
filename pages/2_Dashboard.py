@@ -4,7 +4,7 @@ import duckdb
 # import os
 import plotly.express as px
 import pandas as pd
-# import io
+import io
 import streamlit_authenticator as stauth
 import extra_streamlit_components as stx
 import yaml
@@ -13,7 +13,7 @@ from yaml.loader import SafeLoader
 # import json
 from st_pages import show_pages, hide_pages, Page
 
-# buffer = io.BytesIO()
+buffer = io.BytesIO()
 
 # headers = _get_websocket_headers()
 # st.write(headers)
@@ -34,11 +34,28 @@ show_pages(
 hide_pages(['Login'])
 
 ss = st.session_state
+# st.write(ss)
 
 @st.cache_resource(experimental_allow_widgets=True)
 def get_manager():    
     return stx.CookieManager(key='streamlit-demo-1-cookies')
 cookie_manager = get_manager()
+
+def clear_filters(filter_columns):
+    # st.write(filter_columns)
+    with st.container(height=1, border=False):
+        for filter_column in filter_columns:
+            # st.write(filter_column)
+            filter_key = f'filter_{filter_column}'
+            filter_key_selected = f'{filter_key}_selected'
+            # cookies = cookie_manager.get_all('get_all_clear_filters')
+            if filter_key in cookies.keys():
+                cookie_manager.set(filter_key, [], f'clear_{filter_key}')
+            if filter_key in ss:
+                ss[filter_key] = []
+            if filter_key_selected in ss:
+                ss[filter_key_selected] = []
+    return
 
 with st.container(border=False, height=1):
     cookie_manager.set('last_page', './pages/2_Dashboard.py')
@@ -140,27 +157,47 @@ else:
     ]
     
     with st.container(border=False, height=1):
-        for fc in filter_columns:
+        for filter_column in filter_columns:
             # st.write(cookie_manager.get(cookie=f'filter_{fc}'))
             # ss[f'filter_{fc}'] = cookie_manager.get(cookie=f'filter_{fc}')
-            if f'filter_{fc}' not in ss:
-                ss[f'filter_{fc}'] = cookies.get(f'filter_{fc}', [])
+            filter_key = f'filter_{filter_column}'
+            if filter_key not in ss:
+                ss[filter_key] = cookie_manager.get(filter_key)# .get(filter_key, [])
             else:
-                cookie_manager.set(f'filter_{fc}', ss[f'filter_{fc}'], f'set_cookie_filter_{fc}')
+                cookie_manager.set(filter_key, ss[filter_key], f'set_cookie_{filter_key}')
                 # cookies[f'filter_{fc}'] = ss[f'filter_{fc}']
-            if len(ss[f'filter_{fc}']) == 0:
+            if ss[filter_key] is None:
+                ss[filter_key] = []
+            elif len(ss[filter_key]) == 0:
                 pass
-            elif 'All' in ss[f'filter_{fc}']:
+            elif 'All' in ss[filter_key]:
                 pass
-            elif None in ss[f'filter_{fc}']:
+            elif None in ss[filter_key]:
                 pass
             else:
-                df = df[df[fc].isin(ss[f'filter_{fc}'])]
+                df = df[df[filter_column].isin(ss[filter_key])]
                 # st.caption(f"Filter applied - {fc.capitalize()}: {ss[f'filter_{fc}']}")
         # cookie_manager.batch_set(cookies)
         # st.write(cookies)
         # st.write(cookie_manager.get_all(key="get_all_2"))
         # st.write(ss.filter_year, ss.filter_make)
+    with st.sidebar.form(
+        key='form_clear_filters',
+        clear_on_submit=False,
+        border=False,
+    ) as form_clear_filters:
+        clear_filter_submitted = st.form_submit_button(
+            label='Clear Filters',
+            # on_click=clear_filters,
+        )
+        if clear_filter_submitted:
+            clear_filters(filter_columns)
+    # st.sidebar.button(
+    #     label='Clear Filters',
+    #     key='button_clear_filters',
+    #     on_click=clear_filters,
+    #     args=(filter_columns),
+    # )
     with st.sidebar.form(
         key='form_filter',
         clear_on_submit=False,
@@ -175,13 +212,13 @@ else:
                     label=filter_column.capitalize(),
                     options=['All'] + list(df[filter_column].sort_values().unique()),
                     key=filter_key,
-                    default=ss[f'{filter_key}_selected'],
+                    default=ss[f'{filter_key}'], # ss[f'{filter_key}_selected'],
                 )
     
     with st.container():
         col1, col2 = st.columns([1,3])
 
-        with col1:        
+        with col1:
             st.subheader('Bar Chart Analysis')
             st.selectbox(
                 label='Choose a column for x-axis',

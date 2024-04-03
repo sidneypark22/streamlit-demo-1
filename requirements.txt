@@ -1,5 +1,6 @@
 duckdb
 streamlit==1.31.1
+# streamlit
 plotly
 openpyxl
 xlsxwriter
