@@ -212,7 +212,7 @@ else:
                     label=filter_column.capitalize(),
                     options=['All'] + list(df[filter_column].sort_values().unique()),
                     key=filter_key,
-                    default=ss[f'{filter_key}'], # ss[f'{filter_key}_selected'],
+                    default=ss[f'{filter_key}_selected'],
                 )
     
     with st.container():
