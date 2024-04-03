@@ -25,14 +25,15 @@ show_pages(
 hide_pages(['Login'])
 
 ss = st.session_state
+st.write(ss)
 
-@st.cache_resource(experimental_allow_widgets=True)
-def get_manager():
-    return stx.CookieManager(key='streamlit-demo-1-cookies')
-cookie_manager = get_manager()
+# @st.cache_resource(experimental_allow_widgets=True)
+# def get_manager():
+#     return stx.CookieManager(key='streamlit-demo-1-cookies')
+# cookie_manager = get_manager()
 
-with st.container(border=False, height=1):
-    cookie_manager.set('last_page', './Home.py')
+# with st.container(border=False, height=1):
+#     cookie_manager.set('last_page', './Home.py')
 
 # Login
 with open('config.yaml') as file:
@@ -45,8 +46,7 @@ with open('config.yaml') as file:
         config['cookie']['expiry_days'],
         config['pre-authorized']
     )
-
-authenticator.login()
+    authenticator.login()
 
 if ss.get("authentication_status") is None:
     st.switch_page('./pages/99_Login.py')
