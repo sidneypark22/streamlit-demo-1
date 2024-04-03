@@ -19,10 +19,10 @@ show_pages(
         Page("Home.py", "Home", "🏠"),
         Page("./pages/2_Dashboard.py", "Dashboard"),
         Page("./pages/3_Contact_Us.py", "Contact Us"),
-        Page('./pages/99_Login.py', 'Login'),
+        # Page('./pages/99_Login.py', 'Login'),
     ]
 )
-hide_pages(['Login'])
+# hide_pages(['Login'])
 
 ss = st.session_state
 # st.write(ss)
@@ -32,8 +32,8 @@ def get_manager():
     return stx.CookieManager(key='streamlit-demo-1-cookies')
 cookie_manager = get_manager()
 
-with st.container(border=False, height=1):
-    cookie_manager.set('last_page', './Home.py')
+# with st.container(border=False, height=1):
+#     cookie_manager.set('last_page', './Home.py')
 
 # Login
 with open('config.yaml') as file:
@@ -47,18 +47,22 @@ with open('config.yaml') as file:
         config['pre-authorized']
     )
 
-authenticator.login()
+# authenticator.login()
 
 if ss.get("authentication_status") is None:
-    st.switch_page('./pages/99_Login.py')
+    # st.switch_page('./pages/99_Login.py')
+    authenticator.login()
+    # pass
 elif st.session_state["authentication_status"] is False:
     st.error('Username or password is incorrect')
 else:
     # cookie_manager = get_manager()
     with st.sidebar:
         authenticator.logout()
+    # st.write(ss)
+    st.write(f'Hello, {ss.name}!')
 
-st.write('Hello')
+
 
 # cookie_manager = get_manager()
 

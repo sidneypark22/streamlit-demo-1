@@ -19,10 +19,10 @@ show_pages(
         Page("Home.py", "Home", "🏠"),
         Page("./pages/2_Dashboard.py", "Dashboard"),
         Page("./pages/3_Contact_Us.py", "Contact Us"),
-        Page('./pages/99_Login.py', 'Login'),
+        # Page('./pages/99_Login.py', 'Login'),
     ]
 )
-hide_pages(['Login'])
+# hide_pages(['Login'])
 
 @st.cache_resource(experimental_allow_widgets=True)
 def get_manager():
@@ -48,7 +48,7 @@ authenticator = stauth.Authenticate(
 authenticator.login()
 
 if ss.get("authentication_status") is None:
-    st.switch_page('./pages/99_Login.py')
+    st.switch_page('.Home.py')
 elif st.session_state["authentication_status"] is False:
     st.error('Username or password is incorrect')
 else:
