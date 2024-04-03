@@ -44,6 +44,7 @@ authenticator = stauth.Authenticate(
 
 authenticator.login()
 if st.session_state["authentication_status"] is True:
+    st.write(last_page)
     st.switch_page(last_page)
 elif st.session_state["authentication_status"] is False:
     st.error('Username or password is incorrect')
