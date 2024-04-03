@@ -5,5 +5,5 @@ openpyxl
 xlsxwriter
 streamlit-authenticator
 propelauth-py
-extra-streamlit-components
+# extra-streamlit-components
 st-pages

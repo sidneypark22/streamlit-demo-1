@@ -23,12 +23,12 @@ st.set_page_config(
 
 ss = st.session_state
 
-# @st.cache_resource(experimental_allow_widgets=True)
-# def get_manager():
-#     return stx.CookieManager(key='streamlit-demo-1-cookies')
-# cookie_manager = get_manager()
-# with st.container(border=False, height=1):
-#     last_page = cookie_manager.get('last_page') # ss.get('init', {}).get('last_page', './Home.py')
+@st.cache_resource(experimental_allow_widgets=True)
+def get_manager():
+    return stx.CookieManager(key='streamlit-demo-1-cookies')
+cookie_manager = get_manager()
+with st.container(border=False, height=1):
+    last_page = cookie_manager.get('last_page') # ss.get('init', {}).get('last_page', './Home.py')
 
 with open('./config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
@@ -44,8 +44,7 @@ authenticator = stauth.Authenticate(
 
 authenticator.login()
 if st.session_state["authentication_status"] is True:
-    # st.switch_page(last_page)
-    st.switch_page('./Home.py')
+    st.switch_page(last_page)
 elif st.session_state["authentication_status"] is False:
     st.error('Username or password is incorrect')
 
