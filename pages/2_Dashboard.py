@@ -45,17 +45,14 @@ def clear_filters(filter_columns):
     # st.write(filter_columns)
     with st.container(height=1, border=False):
         for filter_column in filter_columns:
-            # st.write(filter_column)
             filter_key = f'filter_{filter_column}'
             filter_key_selected = f'{filter_key}_selected'
-            # cookies = cookie_manager.get_all('get_all_clear_filters')
             if filter_key in cookies.keys():
                 cookie_manager.set(filter_key, [], f'clear_{filter_key}')
             if filter_key in ss:
                 ss[filter_key] = []
             if filter_key_selected in ss:
                 ss[filter_key_selected] = []
-    return
 
 with st.container(border=False, height=1):
     cookie_manager.set('last_page', './pages/2_Dashboard.py')
@@ -181,23 +178,25 @@ else:
         # st.write(cookies)
         # st.write(cookie_manager.get_all(key="get_all_2"))
         # st.write(ss.filter_year, ss.filter_make)
-    with st.sidebar.form(
-        key='form_clear_filters',
-        clear_on_submit=False,
-        border=False,
-    ) as form_clear_filters:
-        clear_filter_submitted = st.form_submit_button(
-            label='Clear Filters',
-            # on_click=clear_filters,
-        )
-        if clear_filter_submitted:
-            clear_filters(filter_columns)
-    # st.sidebar.button(
-    #     label='Clear Filters',
-    #     key='button_clear_filters',
-    #     on_click=clear_filters,
-    #     args=(filter_columns),
-    # )
+    # with st.sidebar.form(
+    #     key='form_clear_filters',
+    #     clear_on_submit=False,
+    #     border=False,
+    # ) as form_clear_filters:
+    #     clear_filter_submitted = st.form_submit_button(
+    #         label='Clear Filters',
+    #         # on_click=clear_filters,
+    #     )
+    #     if clear_filter_submitted:
+    #         clear_filters(filter_columns)
+    clear_filters_cliked = st.sidebar.button(
+        label='Clear Filters',
+        key='button_clear_filters',
+        # on_click=clear_filters,
+        # args=(filter_columns),
+    )
+    if clear_filters_cliked:
+        clear_filters(filter_columns)
     with st.sidebar.form(
         key='form_filter',
         clear_on_submit=False,
