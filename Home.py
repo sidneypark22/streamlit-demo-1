@@ -47,11 +47,12 @@ with open('config.yaml') as file:
         config['pre-authorized']
     )
 
-# authenticator.login()
+authenticator.login()
 
 if ss.get("authentication_status") is None:
     # st.switch_page('./pages/99_Login.py')
-    authenticator.login()
+    # authenticator.login()
+    st.warning('Please enter your username and password')
     # pass
 elif st.session_state["authentication_status"] is False:
     st.error('Username or password is incorrect')
