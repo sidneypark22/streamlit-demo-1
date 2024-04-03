@@ -211,8 +211,8 @@ else:
             
             ss.contact_form_submit_count += 1
 
-    with st.container():
-        st.dataframe(df)
+    # with st.container():
+    #     st.dataframe(df)
 
     with c_contact_form:
         with st.form(
