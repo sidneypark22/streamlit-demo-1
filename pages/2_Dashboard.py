@@ -1,10 +1,10 @@
 import streamlit as st
 import duckdb
-import sys
-import os
+# import sys
+# import os
 import plotly.express as px
 import pandas as pd
-import io
+# import io
 import streamlit_authenticator as stauth
 import extra_streamlit_components as stx
 import yaml
@@ -13,7 +13,7 @@ from yaml.loader import SafeLoader
 # import json
 from st_pages import show_pages, hide_pages, Page
 
-buffer = io.BytesIO()
+# buffer = io.BytesIO()
 
 # headers = _get_websocket_headers()
 # st.write(headers)

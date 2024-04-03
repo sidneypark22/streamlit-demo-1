@@ -10,16 +10,16 @@ st.set_page_config(
     initial_sidebar_state='collapsed',
     layout='centered',
 )
-# st.markdown(
-# """
-# <style>
-#     [data-testid="collapsedControl"] {
-#         display: none
-#     }
-# </style>
-# """,
-#     unsafe_allow_html=True,
-# )
+st.markdown(
+"""
+<style>
+    [data-testid="collapsedControl"] {
+        display: none
+    }
+</style>
+""",
+    unsafe_allow_html=True,
+)
 
 ss = st.session_state
 
@@ -32,8 +32,8 @@ with st.container(border=False, height=1):
 
 with open('./config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
-st.write(config)
-st.write(ss)
+# st.write(config)
+# st.write(ss)
 authenticator = stauth.Authenticate(
     config['credentials'],
     config['cookie']['name'],

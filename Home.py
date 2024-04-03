@@ -25,7 +25,7 @@ show_pages(
 hide_pages(['Login'])
 
 ss = st.session_state
-st.write(ss)
+# st.write(ss)
 
 @st.cache_resource(experimental_allow_widgets=True)
 def get_manager():
