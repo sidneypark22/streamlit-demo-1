@@ -12,6 +12,7 @@ from yaml.loader import SafeLoader
 # from streamlit.web.server.websocket_headers import _get_websocket_headers 
 # import json
 from st_pages import show_pages, hide_pages, Page
+# from streamlit_js_eval import streamlit_js_eval
 
 buffer = io.BytesIO()
 
@@ -26,8 +27,8 @@ st.set_page_config(
 show_pages(
     [
         Page("Home.py", "Home", "🏠"),
-        Page("./pages/2_Dashboard.py", "Dashboard"),
-        Page("./pages/3_Contact_Us.py", "Contact Us"),
+        Page("pages/2_Dashboard.py", "Dashboard"),
+        Page("pages/3_Contact_Us.py", "Contact Us"),
         # Page('./pages/99_Login.py', 'Login'),
     ]
 )
@@ -53,6 +54,8 @@ def clear_filters(filter_columns):
                 ss[filter_key] = []
             if filter_key_selected in ss:
                 ss[filter_key_selected] = []
+    # streamlit_js_eval(js_expressions="parent.window.location.reload()")
+    st.rerun()
 
 with st.container(border=False, height=1):
     cookie_manager.set('last_page', './pages/2_Dashboard.py')

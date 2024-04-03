@@ -8,3 +8,4 @@ streamlit-authenticator
 propelauth-py
 # extra-streamlit-components
 st-pages
+# streamlit_js_eval

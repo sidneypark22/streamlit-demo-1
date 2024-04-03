@@ -17,8 +17,8 @@ st.set_page_config(
 show_pages(
     [
         Page("Home.py", "Home", "🏠"),
-        Page("./pages/2_Dashboard.py", "Dashboard"),
-        Page("./pages/3_Contact_Us.py", "Contact Us"),
+        Page("pages/2_Dashboard.py", "Dashboard"),
+        Page("pages/3_Contact_Us.py", "Contact Us"),
         # Page('./pages/99_Login.py', 'Login'),
     ]
 )
