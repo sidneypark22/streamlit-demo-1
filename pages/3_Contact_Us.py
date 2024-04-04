@@ -88,6 +88,7 @@ else:
     phone_number_pattern = r"^\d+-\d+-\d+$"
     email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 
+    c_top_message_form = st.container()
     c_contact_form = st.container()
     c_message = st.container()
     c3 = st.container()
@@ -204,16 +205,23 @@ else:
                 ss['contact_request_submitted'] = True
                 with c_message:
                     st.success("Message has been successfully submitted.")
+
+                    st.write('Request has been saved to database. Further works can be done to send an email when a request is logged.')
+                    st.write('- First name:', first_name)
+                    st.write('- Last name:', last_name)
+                    st.write('- Email:', email)
+                    st.write('- Phone number:', phone_number)
+                    st.write('- Message:', message)
+                    
             else:
                 with c_message:
                     for _, v in error_messages.items():
                         st.error(v)
             
-            ss.contact_form_submit_count += 1
+            ss.contact_form_submit_count += 1    
 
-    with st.container():
-        st.write('Below requests have been saved to database. Further works can be done to send an email when a request is logged.')
-        st.dataframe(df)
+    with c_top_message_form:
+        st.write('Details entered in the form will be saved to a temporary database.')
 
     with c_contact_form:
         with st.form(
