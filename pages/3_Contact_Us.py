@@ -72,12 +72,12 @@ else:
 
     conn.execute(
         """create table if not exists contact_request (
-        first_name string,
-        last_name string,
-        email string,
-        phone_number string,
-        message string,
-        request_timestamp timestamp
+            first_name string,
+            last_name string,
+            email string,
+            phone_number string,
+            message string,
+            request_timestamp timestamp
         )"""
     )
 
@@ -211,8 +211,9 @@ else:
             
             ss.contact_form_submit_count += 1
 
-    # with st.container():
-    #     st.dataframe(df)
+    with st.container():
+        st.write('Below requests have been saved to database. Further works can be done to send an email when a request is logged.')
+        st.dataframe(df)
 
     with c_contact_form:
         with st.form(
