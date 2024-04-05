@@ -5,8 +5,8 @@ from yaml.loader import SafeLoader
 # from streamlit_authenticator.utilities.hasher import Hasher
 # import hmac
 import extra_streamlit_components as stx
-import datetime
-from st_pages import show_pages, hide_pages, Page
+import time
+# from st_pages import show_pages, hide_pages, Page
 
 st.set_page_config(
     page_title='Home',
@@ -48,6 +48,7 @@ with open('config.yaml') as file:
     )
 
 authenticator.login()
+time.sleep(3)
 
 if ss.get("authentication_status") is None:
     # st.switch_page('./pages/99_Login.py')
