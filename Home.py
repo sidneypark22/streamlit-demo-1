@@ -47,6 +47,7 @@ with open('config.yaml') as file:
         config['pre-authorized']
     )
 
+time.sleep(3)
 authenticator.login()
 time.sleep(3)
 
