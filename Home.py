@@ -36,9 +36,6 @@ authenticator.login(
     clear_on_submit=True,
 )
 
-if st.session_state.get('authentication_status') is None:
-    st.warning('Please enter your username and password. Use "jsmith" and "abc" for this demo.')
-
 if st.session_state['authentication_status']:
     authenticator.logout(
         location='sidebar',
@@ -46,5 +43,5 @@ if st.session_state['authentication_status']:
     st.write(f'Hello {st.session_state["name"]}!')
 elif st.session_state['authentication_status'] == False:
     st.error('Username or password is incorrect')
-# elif st.session_state['authentication_status'] is None:
-#     st.warning('Please enter your username and password. Use "jsmith" and "abc" for this demo.')
+if st.session_state.get('authentication_status') is None:
+    st.warning('Please enter your username and password. Use "jsmith" and "abc" for this demo.')
