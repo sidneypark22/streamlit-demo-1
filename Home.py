@@ -47,9 +47,10 @@ with open('config.yaml') as file:
         config['pre-authorized']
     )
 
-# time.sleep(3)
+time.sleep(2)
 name, authentication_status, username = authenticator.login()
 # time.sleep(3)
+st.write(name, authentication_status, username)
 
 if authentication_status:
     with st.sidebar:
