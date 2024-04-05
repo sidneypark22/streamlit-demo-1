@@ -16,51 +16,18 @@ from st_pages import show_pages, hide_pages, Page
 
 buffer = io.BytesIO()
 
-# headers = _get_websocket_headers()
-# st.write(headers)
-
 st.set_page_config(
     initial_sidebar_state='auto',
     layout='wide',
 )
-
-# show_pages(
-#     [
-#         Page("Home.py", "Home", "🏠"),
-#         Page("pages/2_Dashboard.py", "Dashboard"),
-#         Page("pages/3_Contact_Us.py", "Contact Us"),
-#         # Page('./pages/99_Login.py', 'Login'),
-#     ]
-# )
-# # hide_pages(['Login'])
-
-ss = st.session_state
-# st.write(ss)
 
 @st.cache_resource(experimental_allow_widgets=True)
 def get_manager():    
     return stx.CookieManager(key='streamlit-demo-1-cookies')
 cookie_manager = get_manager()
 
-# def clear_filters(filter_columns):
-#     # st.write(filter_columns)
-#     if ss.get('button_clear_filters', False):
-#         with st.container(height=1, border=False):
-#             for filter_column in filter_columns:
-#                 filter_key = f'filter_{filter_column}'
-#                 # filter_key_selected = f'{filter_key}_selected'
-#                 if filter_key in cookies.keys():
-#                     cookie_manager.set(filter_key, [], f'clear_{filter_key}')
-#                 if filter_key in ss:
-#                     ss[filter_key] = []
-#                 # if filter_key_selected in ss:
-#                 #     ss[filter_key_selected] = []
-#         # st.rerun()
-
 with st.container(border=False, height=1):
     cookie_manager.set('last_page', './pages/2_Dashboard.py')
-
-cookies = cookie_manager.get_all()
 
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
@@ -75,16 +42,14 @@ with open('config.yaml') as file:
 
 authenticator.login()
 
-if ss.get("authentication_status") is None:
+if st.session_state["authentication_status"] is None:
     st.switch_page('Home.py')
-elif st.session_state["authentication_status"] is False:
-    st.error('Username or password is incorrect')
 else:
     with st.sidebar.container():
         authenticator.logout()
     
-    if 'base_df' not in ss:
-        ss.base_df = duckdb.sql(
+    if 'base_df' not in st.session_state:
+        st.session_state['base_df'] = duckdb.sql(
             """with cte_car_prices as (
                 select *, try_strptime(substring(saledate, 1, 33), '%a %b %d %Y %H:%M:%S %Z') as sale_date
                 from read_csv('pages/files/car_prices.csv')
@@ -125,18 +90,7 @@ else:
             """
         ).df()
 
-    df = ss.base_df.copy()
-
-    # st.markdown(
-    #     """
-    #     <style>
-    #         section[data-testid="stSidebar"] {
-    #             width: 300px !important; # Set the width to your desired value
-    #         }
-    #     </style>
-    #     """,
-    #     unsafe_allow_html=True,
-    # )
+    df = st.session_state['base_df'].copy()
 
     filter_columns = [
         'year',
@@ -156,67 +110,24 @@ else:
         'seller'
     ]
 
-    # if ss['button_clear_filters']:
-    #     clear_filters(filter_columns)
-    
-    # with st.sidebar.form(
-    #     key='form_clear_filters',
-    #     clear_on_submit=True,
-    #     border=False,
-    # ) as form_filter:
-    #     clear_filters_submitted = st.form_submit_button(label='Clear Filters', on_click=clear_filters(filter_columns))
-    #     if clear_filters_submitted:
-    #         clear_filters(filter_columns)
-    #         st.rerun()
-    
-    # clear_filters_cliked = st.sidebar.button(
-    #     label='Clear Filters',
-    #     key='button_clear_filters',
-    #     on_click=clear_filters(filter_columns),
-    #     # args=(filter_columns),
-    # )
-
-    # if clear_filters_cliked:
-    #     clear_filters(filter_columns)
-    #     st.rerun()
-    
     with st.container(border=False, height=1):
         for filter_column in filter_columns:
-            # st.write(cookie_manager.get(cookie=f'filter_{fc}'))
-            # ss[f'filter_{fc}'] = cookie_manager.get(cookie=f'filter_{fc}')
             filter_key = f'filter_{filter_column}'
-            if filter_key not in ss:
-                ss[filter_key] = cookie_manager.get(filter_key)# .get(filter_key, [])
+            if filter_key not in st.session_state:
+                st.session_state[filter_key] = cookie_manager.get(filter_key)
             else:
-                cookie_manager.set(filter_key, ss[filter_key], f'set_cookie_{filter_key}')
-                # cookies[f'filter_{fc}'] = ss[f'filter_{fc}']
-            if ss[filter_key] is None:
-                ss[filter_key] = []
-            elif len(ss[filter_key]) == 0:
+                cookie_manager.set(filter_key, st.session_state[filter_key], f'set_cookie_{filter_key}')
+            if st.session_state[filter_key] is None:
+                st.session_state[filter_key] = []
+            elif len(st.session_state[filter_key]) == 0:
                 pass
-            elif 'All' in ss[filter_key]:
+            elif 'All' in st.session_state[filter_key]:
                 pass
-            elif None in ss[filter_key]:
+            elif None in st.session_state[filter_key]:
                 pass
             else:
-                df = df[df[filter_column].isin(ss[filter_key])]
-                # st.caption(f"Filter applied - {fc.capitalize()}: {ss[f'filter_{fc}']}")
-        # cookie_manager.batch_set(cookies)
-        # st.write(cookies)
-        # st.write(cookie_manager.get_all(key="get_all_2"))
-        # st.write(ss.filter_year, ss.filter_make)
-    # with st.sidebar.form(
-    #     key='form_clear_filters',
-    #     clear_on_submit=False,
-    #     border=False,
-    # ) as form_clear_filters:
-    #     clear_filter_submitted = st.form_submit_button(
-    #         label='Clear Filters',
-    #         # on_click=clear_filters,
-    #     )
-    #     if clear_filter_submitted:
-    #         clear_filters(filter_columns)
-
+                df = df[df[filter_column].isin(st.session_state[filter_key])]
+    
     with st.sidebar.form(
         key='form_filter',
         clear_on_submit=False,
@@ -224,16 +135,13 @@ else:
     ) as form_filter:
         with st.expander('Filters', expanded=False):
             st.form_submit_button(label='Apply Filters')
-            # if clear_filters_cliked:
-            #     clear_filters(filter_columns)
             for filter_column in filter_columns:
                 filter_key=f'filter_{filter_column}'
-                # ss[f'{filter_key}_selected'] = ss.get(filter_key, [])
                 st.multiselect(
                     label=filter_column.capitalize(),
                     options=['All'] + list(df[filter_column].sort_values().unique()),
                     key=filter_key,
-                    default=ss.get(filter_key, []), #ss[f'{filter_key}_selected'],
+                    default=st.session_state.get(filter_key, []),
                 )
     
     with st.container():
@@ -247,8 +155,8 @@ else:
                 options=filter_columns,
             )
         with col2:
-            if ss.get('filter_bar_chart_x_axis', None) is not None:
-                x_axis_column = ss['filter_bar_chart_x_axis']
+            if st.session_state.get('filter_bar_chart_x_axis', None) is not None:
+                x_axis_column = st.session_state['filter_bar_chart_x_axis']
                 bar_chart_df = duckdb.sql(
                     f"""select {x_axis_column}, sum(selling_price) as selling_price
                     from df
@@ -280,7 +188,7 @@ else:
                     key='add_category_to_line_chart',
                     options=['No', 'Yes']
                 )
-            if ss.add_category_to_line_chart == 'Yes':
+            if st.session_state.add_category_to_line_chart == 'Yes':
                 st.selectbox(
                     label='Choose a column for category',
                     key='filter_line_chart_category',
@@ -288,10 +196,9 @@ else:
                 )
 
         with col2:
-            # if ss.get('filter_line_chart_category', None) is not None:
             x_axis_column = 'year_month'
-            if ss.add_category_to_line_chart == 'Yes':
-                category_column = ss['filter_line_chart_category']
+            if st.session_state.add_category_to_line_chart == 'Yes':
+                category_column = st.session_state['filter_line_chart_category']
                 line_chart_df = duckdb.sql(
                     f"""select {x_axis_column}, {category_column}, sum(selling_price) as selling_price
                     from df
@@ -316,7 +223,6 @@ else:
                 color=category_column,
             )
             fig_line.update_xaxes(tickangle=270)
-            # fig.update_layout(xaxis_type='category')
             fig_line.update_layout(xaxis_title=x_axis_column.replace('_', ' ').capitalize(), yaxis_title='Total Selling Prices')
             st.write(fig_line)
 
@@ -327,7 +233,7 @@ else:
             key='radio_show_dataset',
             options=['No', 'Yes']
         )
-        if ss.radio_show_dataset == 'Yes':
+        if st.session_state.radio_show_dataset == 'Yes':
             st.dataframe(df)
             with st.expander(
                 label='Expand to download data',
@@ -337,13 +243,13 @@ else:
                     key='radio_download_data',
                     options=['No', 'Yes'],
                 )
-                if ss.radio_download_data == 'Yes':
+                if st.session_state.radio_download_data == 'Yes':
                     st.radio(
                         label="Choose output file format",
                         key="radio_choose_output_file_format",
                         options=['CSV', 'Excel'],
                     )
-                    if ss.radio_choose_output_file_format == "CSV":
+                    if st.session_state.radio_choose_output_file_format == "CSV":
                         st.download_button(
                             label='Download data above',
                             key='download_button_df',
@@ -351,7 +257,7 @@ else:
                             file_name='output_download.csv',
                             mime='text/csv,'
                         )
-                    elif ss.radio_choose_output_file_format == "Excel":
+                    elif st.session_state.radio_choose_output_file_format == "Excel":
                         with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
                             df.to_excel(writer, sheet_name='Sheet1', index=False)
                             writer.close()
