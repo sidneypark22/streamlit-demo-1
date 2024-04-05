@@ -43,5 +43,5 @@ if st.session_state['authentication_status']:
     st.write(f'Hello {st.session_state["name"]}!')
 elif st.session_state['authentication_status'] == False:
     st.error('Username or password is incorrect')
-if st.session_state.get('authentication_status') is None:
+elif st.session_state.get('authentication_status') is None:
     st.warning('Please enter your username and password. Use "jsmith" and "abc" for this demo.')
