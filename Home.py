@@ -32,8 +32,7 @@ authenticator.login(max_concurrent_users=5, max_login_attempts=3, clear_on_submi
 time.sleep(2)
 
 if st.session_state['authentication_status']:
-    with st.sidebar:
-        authenticator.logout()
+    authenticator.logout()
     st.write(f'Hello {st.session_state["name"]}!')
 elif st.session_state['authentication_status'] == False:
     st.error('Username or password is incorrect')
