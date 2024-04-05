@@ -28,11 +28,17 @@ with open('config.yaml') as file:
         config['pre-authorized']
     )
 
-authenticator.login(max_concurrent_users=5, max_login_attempts=3, clear_on_submit=True)
-time.sleep(2)
+authenticator.login(
+    location='main',
+    max_concurrent_users=5, 
+    max_login_attempts=3, 
+    clear_on_submit=True,
+)
 
 if st.session_state['authentication_status']:
-    authenticator.logout()
+    authenticator.logout(
+        location='sidebar',
+    )
     st.write(f'Hello {st.session_state["name"]}!')
 elif st.session_state['authentication_status'] == False:
     st.error('Username or password is incorrect')
