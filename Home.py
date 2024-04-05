@@ -47,18 +47,25 @@ with open('config.yaml') as file:
         config['pre-authorized']
     )
 
-time.sleep(2)
-name, authentication_status, username = authenticator.login()
-# time.sleep(3)
-st.write(name, authentication_status, username)
+# for i in range(5):
+#     time.sleep(2)
+#     name, authentication_status, username = authenticator.login(max_concurrent_users=5, max_login_attempts=3, clear_on_submit=True)
+#     # time.sleep(3)
+#     if authentication_status is not None:
+#         break
+
+time.sleep(1)
+name, authentication_status, username = authenticator.login(max_concurrent_users=5, max_login_attempts=3, clear_on_submit=True)
+time.sleep(1)
 
 if authentication_status:
     with st.sidebar:
         authenticator.logout()
+        # st.write(logout)
     st.write(f'Hello {name}!')
 elif authentication_status == False:
     st.error('Username or password is incorrect')
-elif authentication_status == None:
+elif authentication_status is None:
     st.warning('Please enter your username and password. Use "jsmith" and "abc" for this demo.')
 
 # if st.session_state.get("authentication_status") is None:
