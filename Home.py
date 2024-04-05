@@ -47,23 +47,32 @@ with open('config.yaml') as file:
         config['pre-authorized']
     )
 
-time.sleep(3)
-authenticator.login()
-time.sleep(3)
+# time.sleep(3)
+name, authentication_status, username = authenticator.login()
+# time.sleep(3)
 
-if ss.get("authentication_status") is None:
-    # st.switch_page('./pages/99_Login.py')
-    # authenticator.login()
-    st.warning('Please enter your username and password. Use "jsmith" and "abc" for this demo.')
-    # pass
-elif st.session_state["authentication_status"] is False:
-    st.error('Username or password is incorrect')
-else:
-    # cookie_manager = get_manager()
+if authentication_status:
     with st.sidebar:
         authenticator.logout()
-    # st.write(ss)
-    st.write(f'Hello, {ss.name}!')
+    st.write(f'Hello {name}!')
+elif authentication_status == False:
+    st.error('Username or password is incorrect')
+elif authentication_status == None:
+    st.warning('Please enter your username and password. Use "jsmith" and "abc" for this demo.')
+
+# if st.session_state.get("authentication_status") is None:
+#     # st.switch_page('./pages/99_Login.py')
+#     # authenticator.login()
+#     st.warning('Please enter your username and password. Use "jsmith" and "abc" for this demo.')
+#     # pass
+# elif st.session_state["authentication_status"] is False:
+#     st.error('Username or password is incorrect')
+# else:
+#     # cookie_manager = get_manager()
+#     with st.sidebar:
+#         authenticator.logout()
+#     # st.write(ss)
+#     st.write(f'Hello, {ss.name}!')
 
 
 
