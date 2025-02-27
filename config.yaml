@@ -16,6 +16,3 @@ cookie:
   expiry_days: 1 #0.00694444444444
   key: cookie_key # Must be string
   name: authentication_cookie
-pre-authorized:
-  emails:
-  - melsby@gmail.com

@@ -18,7 +18,7 @@ def get_cookie_manager(key: str = 'init'):
     cookie_manager = get_manager()
     return cookie_manager
 
-def authenticate(auth_config_file_name: str = 'config.yaml'):
+def authenticate(auth_config_file_name: str = './config.yaml'):
     # Login
     with open(auth_config_file_name) as file:
         config = yaml.load(file, Loader=SafeLoader)
@@ -28,7 +28,7 @@ def authenticate(auth_config_file_name: str = 'config.yaml'):
             config['cookie']['name'],
             config['cookie']['key'],
             config['cookie']['expiry_days'],
-            config['pre-authorized']
+            # config['preauthorized'],
         )
 
     authenticator.login(
@@ -37,7 +37,7 @@ def authenticate(auth_config_file_name: str = 'config.yaml'):
         max_login_attempts=3, 
         clear_on_submit=True,
     )
-
+    
     if st.session_state['authentication_status']:
         authenticator.logout(
             location='sidebar',

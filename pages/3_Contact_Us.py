@@ -12,7 +12,7 @@ st.set_page_config(
     layout='centered',
 )
 
-@st.cache_resource(experimental_allow_widgets=True)
+# @st.cache_resource(experimental_allow_widgets=True)
 def get_manager():
     return stx.CookieManager(key='streamlit-demo-1-cookies')
 cookie_manager = get_manager()
@@ -28,7 +28,7 @@ authenticator = stauth.Authenticate(
     config['cookie']['name'],
     config['cookie']['key'],
     config['cookie']['expiry_days'],
-    config['pre-authorized']
+    # config['pre-authorized']
 )
 
 authenticator.login()

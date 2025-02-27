@@ -34,7 +34,7 @@ filter_columns = [
 ]
 
 def get_cookie_manager(key: str = 'init') -> stx.CookieManager:
-    @st.cache_resource(experimental_allow_widgets=True)
+    # @st.cache_resource(experimental_allow_widgets=True)
     def get_manager():
         return stx.CookieManager(key=key)
     cookie_manager = get_manager()
@@ -54,7 +54,7 @@ def check_authentication(auth_config_file_name: str = 'config.yaml'):
             config['cookie']['name'],
             config['cookie']['key'],
             config['cookie']['expiry_days'],
-            config['pre-authorized']
+            # config['pre-authorized']
         )
 
     authenticator.login()
