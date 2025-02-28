@@ -4,6 +4,7 @@ import yaml
 from yaml.loader import SafeLoader
 import extra_streamlit_components as stx
 import time
+import requests
 
 st.set_page_config(
     page_title='Home',
@@ -20,16 +21,22 @@ def get_cookie_manager(key: str = 'init'):
 
 def authenticate(auth_config_file_name: str = './config.yaml'):
     # Login
-    with open(auth_config_file_name) as file:
-        config = yaml.load(file, Loader=SafeLoader)
+    response = requests.get("https://raw.githubusercontent.com/sidneypark22/streamlit-demo-1/refs/heads/main/config.yaml")
+    config = yaml.load(response.content, Loader=SafeLoader)
+    # with open(auth_config_file_name) as file:
+    #     config = yaml.load(file, Loader=SafeLoader)
+        # credentials = dict(st.secrets['credentials'])
+    # credentials = st.secrets["credentials"]
 
-        authenticator = stauth.Authenticate(
-            config['credentials'],
-            config['cookie']['name'],
-            config['cookie']['key'],
-            config['cookie']['expiry_days'],
-            # config['preauthorized'],
-        )
+    # st.write(credentials)
+    # st.write(config["credentials"])
+
+    authenticator = stauth.Authenticate(
+        config["credentials"],
+        config['cookie']['name'],
+        config['cookie']['key'],
+        config['cookie']['expiry_days'],
+    )
 
     authenticator.login(
         location='main',
@@ -51,3 +58,4 @@ def authenticate(auth_config_file_name: str = './config.yaml'):
 if __name__ == '__main__':
     # cookie_manager = get_cookie_manager('streamlit-demo-1-cookies')
     authenticate()
+    # st.write(st.secrets['credentials'])
