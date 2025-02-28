@@ -106,10 +106,9 @@ def get_base_df():
             sellingprice as selling_price
         from cte_car_prices
         """
-    ).df()
+    )
 
     return base_df
-
 
 if __name__ == '__main__':
     if check_authentication():
@@ -120,7 +119,7 @@ if __name__ == '__main__':
         if 'base_df' not in st.session_state:
             st.session_state['base_df'] = get_base_df()
         
-        df = st.session_state['base_df'].copy()
+        df = st.session_state['base_df']
 
         with st.container(border=False, height=1):
             for filter_column in filter_columns:
@@ -170,12 +169,14 @@ if __name__ == '__main__':
                 if st.session_state.get('filter_bar_chart_x_axis', None) is not None:
                     x_axis_column = st.session_state['filter_bar_chart_x_axis']
                     bar_chart_df = duckdb.sql(
-                        f"""select {x_axis_column}, sum(selling_price) as selling_price
+                        f"""select {x_axis_column} as {x_axis_column}, sum(selling_price) as selling_price
+                        -- sum(selling_price) as selling_price
                         from df
-                        --group by {x_axis_column}
                         group by all
                         order by selling_price desc"""
-                    ).df()
+                    )
+
+                    # st.write(bar_chart_df)
                     
                     fig_bar = px.bar(
                         bar_chart_df, 
@@ -185,7 +186,7 @@ if __name__ == '__main__':
                     fig_bar.update_xaxes(tickangle=270)
                     fig_bar.update_layout(xaxis_type='category')
                     fig_bar.update_layout(xaxis_title=x_axis_column.capitalize(), yaxis_title='Total Selling Prices')
-                    st.write(fig_bar)
+                    st.plotly_chart(fig_bar)
 
         with st.container():
             col1, col2 = st.columns([1,3])
@@ -217,7 +218,7 @@ if __name__ == '__main__':
                         group by all
                         order by 1,2
                         """
-                    ).df()
+                    )
                 else:
                     category_column = None
                     line_chart_df = duckdb.sql(
@@ -226,7 +227,7 @@ if __name__ == '__main__':
                         group by all
                         order by 1
                         """
-                    ).df()
+                    )
                     
                 fig_line = px.line(
                     line_chart_df, 
