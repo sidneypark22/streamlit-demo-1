@@ -21,22 +21,15 @@ def get_cookie_manager(key: str = 'init'):
 
 def authenticate(auth_config_file_name: str = './config.yaml'):
     # Login
-    response = requests.get("https://raw.githubusercontent.com/sidneypark22/streamlit-demo-1/refs/heads/main/config.yaml")
-    config = yaml.load(response.content, Loader=SafeLoader)
-    # with open(auth_config_file_name) as file:
-    #     config = yaml.load(file, Loader=SafeLoader)
-        # credentials = dict(st.secrets['credentials'])
-    # credentials = st.secrets["credentials"]
-
-    st.write(config)
-    # st.write(config["credentials"])
-
-    authenticator = stauth.Authenticate(
-        config["credentials"],
-        config['cookie']['name'],
-        config['cookie']['key'],
-        config['cookie']['expiry_days'],
-    )
+    with open(auth_config_file_name) as file:
+        config = yaml.load(file, Loader=SafeLoader)
+        
+        authenticator = stauth.Authenticate(
+            config["credentials"],
+            config['cookie']['name'],
+            config['cookie']['key'],
+            config['cookie']['expiry_days'],
+        )
 
     authenticator.login(
         location='main',

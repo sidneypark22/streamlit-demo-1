@@ -21,19 +21,15 @@ cookie_manager = get_manager()
 with st.container(border=False, height=1):
     cookie_manager.set('last_page', './pages/3_Contact_Us.py')
 
-# with open('./config.yaml') as file:
-#     config = yaml.load(file, Loader=SafeLoader)
+with open('./config.yaml') as file:
+    config = yaml.load(file, Loader=SafeLoader)
 
-response = requests.get("https://raw.githubusercontent.com/sidneypark22/streamlit-demo-1/refs/heads/main/config.yaml")
-config = yaml.load(response.content, Loader=SafeLoader)
-
-authenticator = stauth.Authenticate(
-    config['credentials'],
-    config['cookie']['name'],
-    config['cookie']['key'],
-    config['cookie']['expiry_days'],
-    # config['pre-authorized']
-)
+    authenticator = stauth.Authenticate(
+        config['credentials'],
+        config['cookie']['name'],
+        config['cookie']['key'],
+        config['cookie']['expiry_days'],
+    )
 
 authenticator.login()
 

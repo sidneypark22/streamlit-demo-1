@@ -47,18 +47,15 @@ def set_cookie(cookie_manager: stx.CookieManager, cookie: str, value: str) -> bo
         # cookie_manager.set('last_page', './pages/2_Dashboard.py')
 
 def check_authentication(auth_config_file_name: str = 'config.yaml'):
-    response = requests.get("https://raw.githubusercontent.com/sidneypark22/streamlit-demo-1/refs/heads/main/config.yaml")
-    config = yaml.load(response.content, Loader=SafeLoader)
-    # with open(auth_config_file_name) as file:
-    #     config = yaml.load(file, Loader=SafeLoader)
-
-    authenticator = stauth.Authenticate(
-        config['credentials'],
-        config['cookie']['name'],
-        config['cookie']['key'],
-        config['cookie']['expiry_days'],
-        # config['pre-authorized']
-    )
+    with open(auth_config_file_name) as file:
+        config = yaml.load(file, Loader=SafeLoader)
+        
+        authenticator = stauth.Authenticate(
+            config['credentials'],
+            config['cookie']['name'],
+            config['cookie']['key'],
+            config['cookie']['expiry_days'],
+        )
 
     authenticator.login()
 
