@@ -13,7 +13,7 @@ st.set_page_config(
 )
 
 def get_cookie_manager(key: str = 'init'):
-    @st.cache_resource(experimental_allow_widgets=False)
+    @st.cache_resource(experimental_allow_widgets=True)
     def get_manager():
         return stx.CookieManager(key=key)
     cookie_manager = get_manager()
