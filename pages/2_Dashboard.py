@@ -72,7 +72,7 @@ def check_authentication(auth_config_file_name: str = 'config.yaml'):
 def get_base_df():
     base_df = duckdb.sql(
         """with cte_car_prices as (
-            select *, try_strptime(substring(saledate, 1, 33), '%a %b %d %Y %H:%M:%S %Z') as sale_date
+            select *, try_strptime(substring(saledate, 1, 33), '%a %b %d %Y %H:%M:%S GMT%z') as sale_date
             from read_csv('pages/files/car_prices.csv')
             --limit 1000
         )
