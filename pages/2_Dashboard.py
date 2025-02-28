@@ -106,7 +106,7 @@ def get_base_df():
             sellingprice as selling_price
         from cte_car_prices
         """
-    )
+    ).df()
 
     return base_df
 
@@ -151,7 +151,7 @@ if __name__ == '__main__':
                     filter_key=f'filter_{filter_column}'
                     st.multiselect(
                         label=filter_column.capitalize(),
-                        options=['All'] + list(df.df()[filter_column].sort_values().unique()),
+                        options=['All'] + list(df[filter_column].sort_values().unique()),
                         key=filter_key,
                         default=st.session_state.get(filter_key, []),
                     )
