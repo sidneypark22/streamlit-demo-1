@@ -13,7 +13,7 @@ st.set_page_config(
 )
 
 def get_cookie_manager(key: str = 'init'):
-    @st.cache_resource(experimental_allow_widgets=True)
+    @st.cache_resource(experimental_allow_widgets=False)
     def get_manager():
         return stx.CookieManager(key=key)
     cookie_manager = get_manager()
@@ -49,6 +49,6 @@ def authenticate(auth_config_file_name: str = './config.yaml'):
         st.warning('Please enter your username and password. Use "jsmith" and "abc" for this demo.')
 
 if __name__ == '__main__':
-    # cookie_manager = get_cookie_manager('streamlit-demo-1-cookies')
+    cookie_manager = get_cookie_manager('streamlit-demo-1-cookies')
     authenticate()
     # st.write(st.secrets['credentials'])

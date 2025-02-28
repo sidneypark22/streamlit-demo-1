@@ -35,7 +35,7 @@ filter_columns = [
 ]
 
 def get_cookie_manager(key: str = 'init') -> stx.CookieManager:
-    # @st.cache_resource(experimental_allow_widgets=True)
+    @st.cache_resource(experimental_allow_widgets=True)
     def get_manager():
         return stx.CookieManager(key=key)
     cookie_manager = get_manager()
@@ -49,7 +49,7 @@ def set_cookie(cookie_manager: stx.CookieManager, cookie: str, value: str) -> bo
 def check_authentication(auth_config_file_name: str = 'config.yaml'):
     with open(auth_config_file_name) as file:
         config = yaml.load(file, Loader=SafeLoader)
-        
+
         authenticator = stauth.Authenticate(
             config['credentials'],
             config['cookie']['name'],
