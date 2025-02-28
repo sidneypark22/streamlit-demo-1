@@ -146,12 +146,12 @@ if __name__ == '__main__':
         ) as form_filter:
             with st.expander('Filters', expanded=False):
                 st.form_submit_button(label='Apply Filters')
+                sort_df = df.df() if type(df) == duckdb.duckdb.DuckDBPyRelation else df
                 for filter_column in filter_columns:
                     filter_key=f'filter_{filter_column}'
                     st.multiselect(
                         label=filter_column.capitalize(),
-                        # options=['All'] + list((df.df() if type(df) == duckdb.duckdb.DuckDBPyRelation else df)[filter_column].sort_values().unique()),
-                        options=['All'] + list(df[filter_column].sort_values().unique()),
+                        options=['All'] + list(sort_df[filter_column].sort_values().unique()),
                         key=filter_key,
                         default=st.session_state.get(filter_key, []),
                     )
