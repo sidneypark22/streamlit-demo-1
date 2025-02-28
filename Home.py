@@ -28,7 +28,7 @@ def authenticate(auth_config_file_name: str = './config.yaml'):
         # credentials = dict(st.secrets['credentials'])
     # credentials = st.secrets["credentials"]
 
-    # st.write(credentials)
+    st.write(config)
     # st.write(config["credentials"])
 
     authenticator = stauth.Authenticate(
